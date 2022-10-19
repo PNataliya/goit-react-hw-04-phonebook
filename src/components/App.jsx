@@ -10,14 +10,16 @@ import { AiOutlineRead } from 'react-icons/ai';
 import { Container, ContainerTitle, SubHeading, IconTitle } from './App.styled';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    JSON.parse(localStorage.getItem('contacts')) || []
+  );
   const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    const localContacts = JSON.parse(localStorage.getItem('contacts'));
-    // console.log(localContacts);
-    localContacts ? setContacts(localContacts) : setContacts([]);
-  }, []);
+  // useEffect(() => {
+  //   const localContacts = JSON.parse(localStorage.getItem('contacts'));
+  //   // console.log(localContacts);
+  //   localContacts ? setContacts(localContacts) : setContacts([]);
+  // }, []);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -26,7 +28,9 @@ export const App = () => {
   const addContact = ({ name, number }) => {
     const newContact = { id: nanoid(), name, number };
 
-    contacts.some(contact => contact.name === name)
+    const someContacts = contacts.some(contact => contact.name === name);
+
+    someContacts
       ? Report.warning(
           `${name}`,
           'This user is already in the contact list.',
